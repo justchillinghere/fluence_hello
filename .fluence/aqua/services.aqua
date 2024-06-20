@@ -1,0 +1,6 @@
+aqua Services declares *
+
+
+service MyService("myService"):
+  get_time_of_node() -> string
+  greeting(name: string) -> string
