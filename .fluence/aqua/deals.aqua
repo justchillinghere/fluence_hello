@@ -15,10 +15,10 @@ func get() -> Deals:
     <- Deals(
         myDeployment=?[MyDeployment(
             definition="bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba",
-            timestamp="2024-06-20T14:48:29.651Z",
-            dealIdOriginal="0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
-            dealId="ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b",
-            chainNetworkId=31337,
+            timestamp="2024-06-20T16:22:35.653Z",
+            dealIdOriginal="0x163f844117a55c7cAa36C7329a2549C7faf98C83",
+            dealId="163f844117a55c7caa36c7329a2549c7faf98c83",
+            chainNetworkId=2358716091832359,
             matched=true
         )]
     )

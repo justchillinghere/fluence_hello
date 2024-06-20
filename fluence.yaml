@@ -9,7 +9,7 @@ version: 8
 deployments:
   myDeployment:
     targetWorkers: 3
-    pricePerWorkerEpoch: "0.33"
+    pricePerWorkerEpoch: "0.8"
     services: [ myService ]
     spells: []
 

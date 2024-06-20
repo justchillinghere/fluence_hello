@@ -110,16 +110,16 @@ export const showSubnet_script = `
                     (seq
                      (seq
                       (seq
-                       (ap ("chainNetworkId" 31337) %MyDeployment_obj_map)
-                       (ap ("dealId" "ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b") %MyDeployment_obj_map)
+                       (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
+                       (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
                       )
-                      (ap ("dealIdOriginal" "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B") %MyDeployment_obj_map)
+                      (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
                      )
                      (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
                     )
                     (ap ("matched" true) %MyDeployment_obj_map)
                    )
-                   (ap ("timestamp" "2024-06-20T14:48:29.651Z") %MyDeployment_obj_map)
+                   (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
                   )
                   (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
                  )
@@ -505,28 +505,184 @@ export function showSubnet(...args) {
     );
 }
 
-export const getInfo_script = `
+export const showDeploymentDetails_script = `
 (xor
- (seq
-  (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (xor
-    (call -relay- ("peer" "identify") [] ret)
-    (fail :error:)
+ (new $info
+  (new $workersInfo
+   (seq
+    (seq
+     (seq
+      (seq
+       (seq
+        (seq
+         (seq
+          (seq
+           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+           (new $option-inline
+            (seq
+             (xor
+              (seq
+               (new %MyDeployment_obj_map
+                (seq
+                 (seq
+                  (seq
+                   (seq
+                    (seq
+                     (seq
+                      (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
+                      (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
+                     )
+                     (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
+                    )
+                    (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
+                   )
+                   (ap ("matched" true) %MyDeployment_obj_map)
+                  )
+                  (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
+                 )
+                 (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
+                )
+               )
+               (ap MyDeployment_obj $option-inline)
+              )
+              (null)
+             )
+             (canon %init_peer_id% $option-inline  #option-inline-0)
+            )
+           )
+          )
+          (new %Deals_obj_map
+           (seq
+            (ap ("myDeployment" #option-inline-0) %Deals_obj_map)
+            (canon %init_peer_id% %Deals_obj_map  Deals_obj)
+           )
+          )
+         )
+         (ap Deals_obj.$.myDeployment Deals_obj_flat)
+        )
+        (ap Deals_obj_flat.$.[0].dealIdOriginal Deals_obj_flat_flat)
+       )
+       (xor
+        (seq
+         (call -relay- ("subnet" "resolve") [Deals_obj_flat_flat] ret)
+         (new -if-else-error-
+          (new -else-error-
+           (new -if-error-
+            (xor
+             (match ret.$.success true
+              (seq
+               (seq
+                (fold ret.$.workers w-0
+                 (seq
+                  (seq
+                   (new %WorkerInfo_obj_map
+                    (seq
+                     (seq
+                      (ap ("hostId" w-0.$.host_id) %WorkerInfo_obj_map)
+                      (ap ("workerId" w-0.$.worker_id) %WorkerInfo_obj_map)
+                     )
+                     (canon -relay- %WorkerInfo_obj_map  WorkerInfo_obj)
+                    )
+                   )
+                   (ap WorkerInfo_obj $workersInfo)
+                  )
+                  (next w-0)
+                 )
+                 (null)
+                )
+                (new %DeploymentDetails_obj_map
+                 (seq
+                  (seq
+                   (seq
+                    (seq
+                     (canon -relay- $workersInfo  #workersInfo_canon)
+                     (ap ("dealId" Deals_obj_flat_flat) %DeploymentDetails_obj_map)
+                    )
+                    (ap ("error" []) %DeploymentDetails_obj_map)
+                   )
+                   (ap ("workers" #workersInfo_canon) %DeploymentDetails_obj_map)
+                  )
+                  (canon -relay- %DeploymentDetails_obj_map  DeploymentDetails_obj)
+                 )
+                )
+               )
+               (ap DeploymentDetails_obj $info)
+              )
+             )
+             (seq
+              (ap :error: -if-error-)
+              (xor
+               (match :error:.$.error_code 10001
+                (seq
+                 (new %DeploymentDetails_obj-0_map
+                  (seq
+                   (seq
+                    (seq
+                     (ap ("dealId" Deals_obj_flat_flat) %DeploymentDetails_obj-0_map)
+                     (ap ("error" ret.$.error) %DeploymentDetails_obj-0_map)
+                    )
+                    (ap ("workers" []) %DeploymentDetails_obj-0_map)
+                   )
+                   (canon -relay- %DeploymentDetails_obj-0_map  DeploymentDetails_obj-0)
+                  )
+                 )
+                 (ap DeploymentDetails_obj-0 $info)
+                )
+               )
+               (seq
+                (seq
+                 (ap :error: -else-error-)
+                 (xor
+                  (seq
+                   (match :error:.$.error_code 10001
+                    (ap -if-error- -if-else-error-)
+                   )
+                   (new $-hop-
+                    (new #-hopc-
+                     (canon -relay- $-hop-  #-hopc-)
+                    )
+                   )
+                  )
+                  (seq
+                   (ap -else-error- -if-else-error-)
+                   (new $-hop-
+                    (new #-hopc-
+                     (canon -relay- $-hop-  #-hopc-)
+                    )
+                   )
+                  )
+                 )
+                )
+                (fail -if-else-error-)
+               )
+              )
+             )
+            )
+           )
+          )
+         )
+        )
+        (fail :error:)
+       )
+      )
+      (canon %init_peer_id% $info  #-info-fix-0)
+     )
+     (ap #-info-fix-0 -info-flat-0)
+    )
+    (call %init_peer_id% ("callbackSrv" "response") [-info-flat-0])
    )
   )
-  (call %init_peer_id% ("callbackSrv" "response") [ret -relay-])
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [:error: 0])
 )
 `;
 
 
-export function getInfo(...args) {
+export function showDeploymentDetails(...args) {
     return callFunction$$(
         args,
         {
-    "functionName": "getInfo",
+    "functionName": "showDeploymentDetails",
     "arrow": {
         "domain": {
             "fields": {},
@@ -535,40 +691,44 @@ export function getInfo(...args) {
         "codomain": {
             "items": [
                 {
-                    "name": "Info",
-                    "fields": {
-                        "node_version": {
-                            "name": "string",
-                            "tag": "scalar"
-                        },
-                        "spell_version": {
-                            "name": "string",
-                            "tag": "scalar"
-                        },
-                        "external_addresses": {
-                            "type": {
+                    "type": {
+                        "name": "DeploymentDetails",
+                        "fields": {
+                            "dealId": {
                                 "name": "string",
                                 "tag": "scalar"
                             },
-                            "tag": "array"
-                        },
-                        "allowed_binaries": {
-                            "type": {
-                                "name": "string",
-                                "tag": "scalar"
+                            "error": {
+                                "type": {
+                                    "name": "string",
+                                    "tag": "scalar"
+                                },
+                                "tag": "option"
                             },
-                            "tag": "array"
+                            "workers": {
+                                "type": {
+                                    "name": "WorkerInfo",
+                                    "fields": {
+                                        "hostId": {
+                                            "name": "string",
+                                            "tag": "scalar"
+                                        },
+                                        "workerId": {
+                                            "type": {
+                                                "name": "string",
+                                                "tag": "scalar"
+                                            },
+                                            "tag": "option"
+                                        }
+                                    },
+                                    "tag": "struct"
+                                },
+                                "tag": "array"
+                            }
                         },
-                        "air_version": {
-                            "name": "string",
-                            "tag": "scalar"
-                        }
+                        "tag": "struct"
                     },
-                    "tag": "struct"
-                },
-                {
-                    "name": "string",
-                    "tag": "scalar"
+                    "tag": "array"
                 }
             ],
             "tag": "unlabeledProduct"
@@ -585,7 +745,7 @@ export function getInfo(...args) {
         "errorFnName": "error"
     }
 },
-        getInfo_script
+        showDeploymentDetails_script
     );
 }
 
@@ -614,16 +774,16 @@ export const runDeployedServices_script = `
                     (seq
                      (seq
                       (seq
-                       (ap ("chainNetworkId" 31337) %MyDeployment_obj_map)
-                       (ap ("dealId" "ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b") %MyDeployment_obj_map)
+                       (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
+                       (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
                       )
-                      (ap ("dealIdOriginal" "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B") %MyDeployment_obj_map)
+                      (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
                      )
                      (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
                     )
                     (ap ("matched" true) %MyDeployment_obj_map)
                    )
-                   (ap ("timestamp" "2024-06-20T14:48:29.651Z") %MyDeployment_obj_map)
+                   (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
                   )
                   (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
                  )
@@ -1079,5 +1239,357 @@ export function getInfos(...args) {
     }
 },
         getInfos_script
+    );
+}
+
+export const getInfo_script = `
+(xor
+ (seq
+  (seq
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+   (xor
+    (call -relay- ("peer" "identify") [] ret)
+    (fail :error:)
+   )
+  )
+  (call %init_peer_id% ("callbackSrv" "response") [ret -relay-])
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [:error: 0])
+)
+`;
+
+
+export function getInfo(...args) {
+    return callFunction$$(
+        args,
+        {
+    "functionName": "getInfo",
+    "arrow": {
+        "domain": {
+            "fields": {},
+            "tag": "labeledProduct"
+        },
+        "codomain": {
+            "items": [
+                {
+                    "name": "Info",
+                    "fields": {
+                        "node_version": {
+                            "name": "string",
+                            "tag": "scalar"
+                        },
+                        "spell_version": {
+                            "name": "string",
+                            "tag": "scalar"
+                        },
+                        "external_addresses": {
+                            "type": {
+                                "name": "string",
+                                "tag": "scalar"
+                            },
+                            "tag": "array"
+                        },
+                        "allowed_binaries": {
+                            "type": {
+                                "name": "string",
+                                "tag": "scalar"
+                            },
+                            "tag": "array"
+                        },
+                        "air_version": {
+                            "name": "string",
+                            "tag": "scalar"
+                        }
+                    },
+                    "tag": "struct"
+                },
+                {
+                    "name": "string",
+                    "tag": "scalar"
+                }
+            ],
+            "tag": "unlabeledProduct"
+        },
+        "tag": "arrow"
+    },
+    "names": {
+        "relay": "-relay-",
+        "getDataSrv": "getDataSrv",
+        "callbackSrv": "callbackSrv",
+        "responseSrv": "callbackSrv",
+        "responseFnName": "response",
+        "errorHandlingSrv": "errorHandlingSrv",
+        "errorFnName": "error"
+    }
+},
+        getInfo_script
+    );
+}
+
+export const showTimeOfSubnetNodes_script = `
+(xor
+ (new $times
+  (seq
+   (seq
+    (seq
+     (seq
+      (seq
+       (seq
+        (seq
+         (seq
+          (seq
+           (seq
+            (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+            (new $option-inline
+             (seq
+              (xor
+               (seq
+                (new %MyDeployment_obj_map
+                 (seq
+                  (seq
+                   (seq
+                    (seq
+                     (seq
+                      (seq
+                       (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
+                       (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
+                      )
+                      (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
+                     )
+                     (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
+                    )
+                    (ap ("matched" true) %MyDeployment_obj_map)
+                   )
+                   (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
+                  )
+                  (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
+                 )
+                )
+                (ap MyDeployment_obj $option-inline)
+               )
+               (null)
+              )
+              (canon %init_peer_id% $option-inline  #option-inline-0)
+             )
+            )
+           )
+           (new %Deals_obj_map
+            (seq
+             (ap ("myDeployment" #option-inline-0) %Deals_obj_map)
+             (canon %init_peer_id% %Deals_obj_map  Deals_obj)
+            )
+           )
+          )
+          (ap Deals_obj.$.myDeployment Deals_obj_flat)
+         )
+         (ap Deals_obj_flat.$.[0].dealIdOriginal Deals_obj_flat_flat)
+        )
+        (xor
+         (call -relay- ("subnet" "resolve") [Deals_obj_flat_flat] ret)
+         (fail :error:)
+        )
+       )
+       (new -if-error-
+        (xor
+         (seq
+          (match ret.$.success false
+           (seq
+            (new $array-inline
+             (seq
+              (seq
+               (ap "Failed to resolve subnet: " $array-inline)
+               (ap ret.$.error $array-inline)
+              )
+              (canon %init_peer_id% $array-inline  #array-inline-0)
+             )
+            )
+            (call %init_peer_id% ("run-console" "print") [#array-inline-0])
+           )
+          )
+          (new $-hop-
+           (new #-hopc-
+            (canon -relay- $-hop-  #-hopc-)
+           )
+          )
+         )
+         (seq
+          (seq
+           (ap :error: -if-error-)
+           (xor
+            (seq
+             (match :error:.$.error_code 10001
+              (null)
+             )
+             (new $-hop-
+              (new #-hopc-
+               (canon -relay- $-hop-  #-hopc-)
+              )
+             )
+            )
+            (fail -if-error-)
+           )
+          )
+          (new $-hop-
+           (new #-hopc-
+            (canon -relay- $-hop-  #-hopc-)
+           )
+          )
+         )
+        )
+       )
+      )
+      (fold ret.$.workers w-0
+       (seq
+        (new -if-error-
+         (xor
+          (mismatch w-0.$.worker_id []
+           (xor
+            (seq
+             (seq
+              (seq
+               (seq
+                (seq
+                 (seq
+                  (new $-hop-
+                   (new #-hopc-
+                    (canon -relay- $-hop-  #-hopc-)
+                   )
+                  )
+                  (new $-hop-
+                   (new #-hopc-
+                    (canon w-0.$.host_id $-hop-  #-hopc-)
+                   )
+                  )
+                 )
+                 (call w-0.$.worker_id.[0] ("myService" "get_time_of_node") [] ret-0)
+                )
+                (new %TimeOfNode_obj_map
+                 (seq
+                  (seq
+                   (seq
+                    (ap ("host_id" w-0.$.host_id) %TimeOfNode_obj_map)
+                    (ap ("time" ret-0) %TimeOfNode_obj_map)
+                   )
+                   (ap ("worker_id" w-0.$.worker_id.[0]) %TimeOfNode_obj_map)
+                  )
+                  (canon w-0.$.worker_id.[0] %TimeOfNode_obj_map  TimeOfNode_obj)
+                 )
+                )
+               )
+               (ap TimeOfNode_obj $times)
+              )
+              (new $-hop-
+               (new #-hopc-
+                (canon w-0.$.host_id $-hop-  #-hopc-)
+               )
+              )
+             )
+             (new $-hop-
+              (new #-hopc-
+               (canon -relay- $-hop-  #-hopc-)
+              )
+             )
+            )
+            (seq
+             (seq
+              (seq
+               (new $-hop-
+                (new #-hopc-
+                 (canon w-0.$.host_id $-hop-  #-hopc-)
+                )
+               )
+               (new $-hop-
+                (new #-hopc-
+                 (canon -relay- $-hop-  #-hopc-)
+                )
+               )
+              )
+              (new $-hop-
+               (new #-hopc-
+                (canon %init_peer_id% $-hop-  #-hopc-)
+               )
+              )
+             )
+             (fail :error:)
+            )
+           )
+          )
+          (seq
+           (ap :error: -if-error-)
+           (xor
+            (match :error:.$.error_code 10002
+             (null)
+            )
+            (fail -if-error-)
+           )
+          )
+         )
+        )
+        (next w-0)
+       )
+       (null)
+      )
+     )
+     (canon %init_peer_id% $times  #-times-fix-0)
+    )
+    (ap #-times-fix-0 -times-flat-0)
+   )
+   (call %init_peer_id% ("callbackSrv" "response") [-times-flat-0])
+  )
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [:error: 0])
+)
+`;
+
+
+export function showTimeOfSubnetNodes(...args) {
+    return callFunction$$(
+        args,
+        {
+    "functionName": "showTimeOfSubnetNodes",
+    "arrow": {
+        "domain": {
+            "fields": {},
+            "tag": "labeledProduct"
+        },
+        "codomain": {
+            "items": [
+                {
+                    "type": {
+                        "name": "TimeOfNode",
+                        "fields": {
+                            "host_id": {
+                                "name": "string",
+                                "tag": "scalar"
+                            },
+                            "time": {
+                                "name": "string",
+                                "tag": "scalar"
+                            },
+                            "worker_id": {
+                                "name": "string",
+                                "tag": "scalar"
+                            }
+                        },
+                        "tag": "struct"
+                    },
+                    "tag": "array"
+                }
+            ],
+            "tag": "unlabeledProduct"
+        },
+        "tag": "arrow"
+    },
+    "names": {
+        "relay": "-relay-",
+        "getDataSrv": "getDataSrv",
+        "callbackSrv": "callbackSrv",
+        "responseSrv": "callbackSrv",
+        "responseFnName": "response",
+        "errorHandlingSrv": "errorHandlingSrv",
+        "errorFnName": "error"
+    }
+},
+        showTimeOfSubnetNodes_script
     );
 }
