@@ -1,26 +1,14 @@
 [
-  {
-    "multiaddr": "/dns4/0-dar.fluence.dev/tcp/9000/wss/p2p/12D3KooWMhVpgfQxBLkQkJed8VFNvgN4iE6MD7xCybb1ZYWW2Gtz",
-    "peerId": "12D3KooWMhVpgfQxBLkQkJed8VFNvgN4iE6MD7xCybb1ZYWW2Gtz"
-  },
-  {
-    "multiaddr": "/dns4/1-dar.fluence.dev/tcp/9000/wss/p2p/12D3KooWEXNUbCXooUwHrHBbrmjsrpHXoEphPwbjQXEGyzbqKnE9",
-    "peerId": "12D3KooWEXNUbCXooUwHrHBbrmjsrpHXoEphPwbjQXEGyzbqKnE9"
-  },
-  {
-    "multiaddr": "/dns4/2-dar.fluence.dev/tcp/9000/wss/p2p/12D3KooWHk9BjDQBUqnavciRPhAYFvqKBe4ZiPPvde7vDaqgn5er",
-    "peerId": "12D3KooWHk9BjDQBUqnavciRPhAYFvqKBe4ZiPPvde7vDaqgn5er"
-  },
-  {
-    "multiaddr": "/dns4/3-dar.fluence.dev/tcp/9000/wss/p2p/12D3KooWBUJifCTgaxAUrcM9JysqCcS4CS8tiYH5hExbdWCAoNwb",
-    "peerId": "12D3KooWBUJifCTgaxAUrcM9JysqCcS4CS8tiYH5hExbdWCAoNwb"
-  },
-  {
-    "multiaddr": "/dns4/4-dar.fluence.dev/tcp/9000/wss/p2p/12D3KooWJbJFaZ3k5sNd8DjQgg3aERoKtBAnirEvPV8yp76kEXHB",
-    "peerId": "12D3KooWJbJFaZ3k5sNd8DjQgg3aERoKtBAnirEvPV8yp76kEXHB"
-  },
-  {
-    "multiaddr": "/dns4/5-dar.fluence.dev/tcp/9000/wss/p2p/12D3KooWCKCeqLPSgMnDjyFsJuWqREDtKNHx1JEBiwaMXhCLNTRb",
-    "peerId": "12D3KooWCKCeqLPSgMnDjyFsJuWqREDtKNHx1JEBiwaMXhCLNTRb"
-  }
+    {
+        "multiaddr": "/ip4/127.0.0.1/tcp/9991/ws/p2p/12D3KooWMh2uzSnL67am7p5bFUS1kYAcLKcbtKhaBduNbsDue7gk",
+        "peerId": "12D3KooWMh2uzSnL67am7p5bFUS1kYAcLKcbtKhaBduNbsDue7gk"
+    },
+    {
+        "multiaddr": "/ip4/127.0.0.1/tcp/9992/ws/p2p/12D3KooWG2ZLE44NrPrWXLs38Q3WYgNTPiUjUKoHgaELDA6oprEJ",
+        "peerId": "12D3KooWG2ZLE44NrPrWXLs38Q3WYgNTPiUjUKoHgaELDA6oprEJ"
+    },
+    {
+        "multiaddr": "/ip4/127.0.0.1/tcp/9993/ws/p2p/12D3KooWHetGLzrGx5rYY6KwwELyxLHfc5FJakMhCgeYD2ZUQUpa",
+        "peerId": "12D3KooWHetGLzrGx5rYY6KwwELyxLHfc5FJakMhCgeYD2ZUQUpa"
+    }
 ]

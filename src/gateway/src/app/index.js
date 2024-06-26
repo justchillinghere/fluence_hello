@@ -1,6 +1,5 @@
 import { Fluence, KeyPair } from "@fluencelabs/js-client";
 import relays from "../relays.json" assert { type: "json" };
-import { Type } from "@sinclair/typebox";
 
 import {
   helloWorld,
@@ -11,19 +10,12 @@ import {
   showDeploymentDetails,
 } from "../compiled-aqua/main.js";
 
+import { Type } from "@sinclair/typebox";
 const DEFAULT_ACCESS_TOKEN = "abcdefhi";
 
 const DEFAULT_PEER_PRIVATE_KEY = Buffer.from(
   (await KeyPair.randomEd25519()).toEd25519PrivateKey()
 ).toString("base64");
-
-// This is an authorization token for the gateway service.
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN ?? DEFAULT_ACCESS_TOKEN;
-if (ACCESS_TOKEN === DEFAULT_ACCESS_TOKEN) {
-  console.warn(
-    "Default access token is used. Remember to generate the appropriate token and save it in env variables."
-  );
-}
 
 // This is the peer's private key.
 const PEER_PRIVATE_KEY =
@@ -36,6 +28,15 @@ const PEER_PRIVATE_KEY_BYTES = new Uint8Array(
   Buffer.from(PEER_PRIVATE_KEY, "base64")
 );
 
+// This is an authorization token for the gateway service.
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN ?? DEFAULT_ACCESS_TOKEN;
+if (ACCESS_TOKEN === DEFAULT_ACCESS_TOKEN) {
+  console.warn(
+    "Default access token is used. Remember to generate the appropriate token and save it in env variables."
+  );
+}
+
+const relay = relays[0];
 export default async function (server) {
   await server.register(import("@fastify/rate-limit"), {
     max: 100,
@@ -43,7 +44,7 @@ export default async function (server) {
   });
 
   server.addHook("onReady", async () => {
-    await Fluence.connect(relays[0], {
+    await Fluence.connect(relay, {
       keyPair: {
         type: "Ed25519",
         source: PEER_PRIVATE_KEY_BYTES,
@@ -82,16 +83,12 @@ export default async function (server) {
     })
   );
 
-  // Request and response
-  server.post(
-    "/callback/hello",
-    { schema: { body: callbackBody, response: { 200: callbackResponse } } },
-    async (request, reply) => {
-      const { name } = request.body;
-      const result = await helloWorld(name);
-      return reply.send(result);
-    }
-  );
+  // Request and response with query param
+  server.get("/callback/hello", async (request, reply) => {
+    const name = request.query.name;
+    const result = await helloWorldRemote(name);
+    return reply.send(result);
+  });
 
   // Fire and forget
   server.get("/webhook/hello", async (_request, reply) => {
@@ -105,26 +102,22 @@ export default async function (server) {
     return reply.send(result);
   });
 
-  server.post(
-    "/callback/runDeployedServices",
-    { schema: { response: { 200: runDeployedServicesResponse } } },
+  server.post("/webhook/runDeployedServices", async (_request, reply) => {
+    void runDeployedServices();
+    return reply.send();
+  });
+
+  server.get(
+    "/callback/showDeploymentDetails",
+    { schema: { response: { 200: Type.String() } } },
     async (_request, reply) => {
-      const result = await runDeployedServices();
+      const result = await showDeploymentDetails();
       return reply.send(result);
     }
   );
-}
 
-server.get(
-  "/callback/showDeploymentDetails",
-  { schema: { response: { 200: Type.String() } } },
-  async (_request, reply) => {
-    const result = await showDeploymentDetails();
+  server.get("/callback/showTimeOfSubnetNodes", async (_request, reply) => {
+    const result = await showTimeOfSubnetNodes();
     return reply.send(result);
-  }
-);
-
-server.get("/callback/showTimeOfSubnetNodes", async (_request, reply) => {
-  const result = await showTimeOfSubnetNodes();
-  return reply.send(result);
-});
+  });
+}

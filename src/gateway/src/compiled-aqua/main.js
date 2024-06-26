@@ -110,16 +110,16 @@ export const showSubnet_script = `
                     (seq
                      (seq
                       (seq
-                       (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
-                       (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
+                       (ap ("chainNetworkId" 31337) %MyDeployment_obj_map)
+                       (ap ("dealId" "ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b") %MyDeployment_obj_map)
                       )
-                      (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
+                      (ap ("dealIdOriginal" "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B") %MyDeployment_obj_map)
                      )
                      (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
                     )
                     (ap ("matched" true) %MyDeployment_obj_map)
                    )
-                   (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
+                   (ap ("timestamp" "2024-06-25T17:57:44.849Z") %MyDeployment_obj_map)
                   )
                   (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
                  )
@@ -529,16 +529,16 @@ export const showDeploymentDetails_script = `
                    (seq
                     (seq
                      (seq
-                      (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
-                      (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
+                      (ap ("chainNetworkId" 31337) %MyDeployment_obj_map)
+                      (ap ("dealId" "ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b") %MyDeployment_obj_map)
                      )
-                     (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
+                     (ap ("dealIdOriginal" "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B") %MyDeployment_obj_map)
                     )
                     (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
                    )
                    (ap ("matched" true) %MyDeployment_obj_map)
                   )
-                  (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
+                  (ap ("timestamp" "2024-06-25T17:57:44.849Z") %MyDeployment_obj_map)
                  )
                  (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
                 )
@@ -774,16 +774,16 @@ export const runDeployedServices_script = `
                     (seq
                      (seq
                       (seq
-                       (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
-                       (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
+                       (ap ("chainNetworkId" 31337) %MyDeployment_obj_map)
+                       (ap ("dealId" "ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b") %MyDeployment_obj_map)
                       )
-                      (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
+                      (ap ("dealIdOriginal" "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B") %MyDeployment_obj_map)
                      )
                      (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
                     )
                     (ap ("matched" true) %MyDeployment_obj_map)
                    )
-                   (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
+                   (ap ("timestamp" "2024-06-25T17:57:44.849Z") %MyDeployment_obj_map)
                   )
                   (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
                  )
@@ -1351,16 +1351,16 @@ export const showTimeOfSubnetNodes_script = `
                     (seq
                      (seq
                       (seq
-                       (ap ("chainNetworkId" 2358716091832359) %MyDeployment_obj_map)
-                       (ap ("dealId" "163f844117a55c7caa36c7329a2549c7faf98c83") %MyDeployment_obj_map)
+                       (ap ("chainNetworkId" 31337) %MyDeployment_obj_map)
+                       (ap ("dealId" "ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b") %MyDeployment_obj_map)
                       )
-                      (ap ("dealIdOriginal" "0x163f844117a55c7cAa36C7329a2549C7faf98C83") %MyDeployment_obj_map)
+                      (ap ("dealIdOriginal" "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B") %MyDeployment_obj_map)
                      )
                      (ap ("definition" "bafkreihb4u3ejvqho7guqqzi4sm6jf6thpeopuuttv4stvrsowhrfwjyba") %MyDeployment_obj_map)
                     )
                     (ap ("matched" true) %MyDeployment_obj_map)
                    )
-                   (ap ("timestamp" "2024-06-20T16:22:35.653Z") %MyDeployment_obj_map)
+                   (ap ("timestamp" "2024-06-25T17:57:44.849Z") %MyDeployment_obj_map)
                   )
                   (canon %init_peer_id% %MyDeployment_obj_map  MyDeployment_obj)
                  )
